@@ -5,7 +5,8 @@ import (
 	"strconv"
 	//"strings"
 	//"errors"
-	"github.com/SiMENhol/funtemps/tree/main/conv"
+	"github.com/SiMENhol/funtemps/conv"
+	//"github.com/uia-worker/misc/conv"
 )
 
 func CelsiusToFahrenheitString(celsius string) (string, error) {
