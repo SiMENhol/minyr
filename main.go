@@ -7,8 +7,7 @@ import (
 	"log"
 	"os"
 	"strings"
-
-	"github.com/SiMENhol/funtemps/conv"
+	"github.com/simenhol/minyr/yr"
 )
 
 func main() {
