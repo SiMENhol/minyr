@@ -6,7 +6,6 @@ import (
 	"io"
 	"log"
 	"os"
-
 	"strings"
 
 	"github.com/SiMENhol/funtemps/conv"
