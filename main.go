@@ -7,7 +7,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/SiMENhol/funtemps"
 	"strings"
 
 )
