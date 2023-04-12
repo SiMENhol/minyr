@@ -6,11 +6,10 @@ import (
 	"io"
 	"log"
 	"os"
-<<<<<<< HEAD
-	"github.com/SiMENhol/funtemps/conv""
-=======
+
+	"github.com/SiMENhol/funtemps/conv"
 	"strings"
->>>>>>> 2c08d48b22101f128d079ebd0c8157dd5884ba39
+
 )
 
 func main() {
