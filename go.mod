@@ -1,3 +1,3 @@
-module github.com/SiMENhol
+module github.com/SiMENhol/minyr
 
-go 1.19
+go 1.18
