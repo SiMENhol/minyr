@@ -3,76 +3,54 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"io"
-	"log"
 	"os"
 	"strings"
+
 	"github.com/simenhol/minyr/yr"
 )
 
 func main() {
-
-	var input string
-	scanner := bufio.NewScanner(os.Stdin)
-
-	for scanner.Scan() {
-		input = scanner.Text()
-		if input == "q" || input == "exit" {
-			fmt.Println("exit")
-			os.Exit(0)
-		} else if input == "convert" {
-			fmt.Println("Konverterer alle målingene gitt i grader Celsius til grader Fahrenheit.")
-			// funksjon som åpner fil, leser linjer, gjør endringer og lagrer nye linjer i en ny fil
-
-			// flere else-if setninger
-		} else {
-			fmt.Println("Venligst velg convert, average eller exit:")
-
-		}
-
-	}
-	src, err := os.Open("table.csv")
-	//src, err := os.Open("/home/janisg/minyr/kjevik-temp-celsius-20220318-20230318.csv")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer src.Close()
-	log.Println(src)
-
-	var buffer []byte
-	var linebuf []byte // nil
-	buffer = make([]byte, 1)
-	bytesCount := 0
-	for {
-		_, err := src.Read(buffer)
-		if err != nil && err != io.EOF {
-			log.Fatal(err)
-		}
-
-		bytesCount++
-		//log.Printf("%c ", buffer[:n])
-		if buffer[0] == 0x0A {
-			log.Println(string(linebuf))
-			// Her
-			elementArray := strings.Split(string(linebuf), ";")
-			if len(elementArray) > 3 {
-				celsius := elementArray[3]
-				fahr := conv.CelsiusToFahrenheit(celsius)
-				log.Println(elementArray[3])
-			}
-			linebuf = nil
-		} else {
-			linebuf = append(linebuf, buffer[0])
-		}
-		//log.Println(string(linebuf))
-		if err == io.EOF {
-			break
-		}
+	// Venter for at brukeren bruker "minyr"
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("Enter 'minyr' to start temperature conversion: ")
+	text, _ := reader.ReadString('\n')
+	if strings.ToLower(strings.TrimSpace(text)) != "minyr" {
+		fmt.Println("Invalid input.")
+		return
 	}
 
+	// Gir brukeren en liste for ting å velge
+	fmt.Println("choose:")
+	fmt.Println("  - 'convert' to convert temperature data from Celsius to Fahrenheit")
+	fmt.Println("  - 'average' to get the average temperature for the entire period")
+	fmt.Print("Enter convert or average: ")
+	option, _ := reader.ReadString('\n')
+	option = strings.ToLower(strings.TrimSpace(option))
+
+	if option == "convert" {
+		err := yr.convert()
+		if err != nil {
+			fmt.Println("Error during temperature conversion:", err)
+			return
+		}
+		fmt.Println("Temperature conversion complete.")
+		return
+	}
+
+	if option == "average" {
+		fmt.Print("Enter unit of measurement ('c' for Celsius or 'f' for Fahrenheit): ")
+		unit, _ := reader.ReadString('\n')
+		unit = strings.ToLower(strings.TrimSpace(unit))
+
+		avg, err := yr.Average(unit)
+		if err != nil {
+			fmt.Println("Error calculating average temperature:", err)
+			return
+		}
+		fmt.Printf("Average temperature: %.2f %s\n", avg, unit)
+	}
+
+	// Wait for user input
+	fmt.Println("Press enter to exit.")
+	fmt.Scanln()
 }
-
-//if err != nil {
-//		log.Fatal(err)
-//	}
-//}
