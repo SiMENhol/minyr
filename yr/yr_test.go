@@ -18,8 +18,8 @@ func testNumberOfLines(t *testing.T, filename string, expected int) {
 	}
 }
 
-const inputFile = "C:/Users/simen/minyr/kjevik-temp-celsius-20220318-20230318.csv" //"../kjevik-temp-celsius-20220318-20230318.csv"
-//const outputFile = "../kjevik-temp-fahr-20220318-20230318.csv"
+const inputFile = "../kjevik-temp-celsius-20220318-20230318.csv"
+const outputFile = "../kjevik-temp-fahr-20220318-20230318.csv"
 
 func TestNumberOfLines(t *testing.T) {
 	// Test number of lines in input file

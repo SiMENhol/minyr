@@ -36,15 +36,10 @@ func main() {
 }
 
 func presentOptions() string {
-	fmt.Println("***********************************************")
-	fmt.Println("*                                             *")
-	fmt.Println("*  Welcome to the temperature converter!      *")
-	fmt.Println("*                                             *")
-	fmt.Println("***********************************************")
-	fmt.Println("Please select an option:")
-	fmt.Println("Type 'convert' to convert create a new file with temperatures in Fahrenheit.")
-	fmt.Println("Type 'average' to calculate the average temperature from the files.")
-	fmt.Println("Type 'exit' to exit the program.")
+	fmt.Println("choose:")
+	fmt.Println("  - 'convert' to convert temperature data from Celsius to Fahrenheit")
+	fmt.Println("  - 'average' to get the average temperature for the entire period")
+	fmt.Print("Enter convert or average: ")
 
 	reader := bufio.NewReader(os.Stdin)
 	choice, err := reader.ReadString('\n')
@@ -230,7 +225,7 @@ func generateOutputFile() error {
 			}
 		} else {
 			// Write test string for the last line
-			_, err = writer.WriteString("Data er basert på gyldig data (per 18.03.2023) (CC BY 4.0) fra Meteorologisk institutt (MET);endringen er gjort av :D")
+			_, err = writer.WriteString("Data er basert på gyldig data (per 18.03.2023) (CC BY 4.0) fra Meteorologisk institutt (MET);endringen er gjort av SiMENhol")
 			if err != nil {
 				return err
 			}
@@ -239,54 +234,6 @@ func generateOutputFile() error {
 	return nil
 }
 
-func celsiusToFahrenheit(celsius float64) float64 {
-	return celsius*9/5 + 32
-}
-
-/**
-func main() {
-	// Venter for at brukeren bruker "minyr"
-	reader := bufio.NewReader(os.Stdin)
-	fmt.Print("Enter 'minyr' to start temperature conversion: ")
-	text, _ := reader.ReadString('\n')
-	if strings.ToLower(strings.TrimSpace(text)) != "minyr" {
-		fmt.Println("Invalid input.")
-		return
-	}
-
-	// Gir brukeren en liste for ting å velge
-	fmt.Println("choose:")
-	fmt.Println("  - 'convert' to convert temperature data from Celsius to Fahrenheit")
-	fmt.Println("  - 'average' to get the average temperature for the entire period")
-	fmt.Print("Enter convert or average: ")
-	option, _ := reader.ReadString('\n')
-	option = strings.ToLower(strings.TrimSpace(option))
-
-	if option == "convert" {
-		err := yr.convert()
-		if err != nil {
-			fmt.Println("Error during temperature conversion:", err)
-			return
-		}
-		fmt.Println("Temperature conversion complete.")
-		return
-	}
-
-	if option == "average" {
-		fmt.Print("Enter unit of measurement ('c' for Celsius or 'f' for Fahrenheit): ")
-		unit, _ := reader.ReadString('\n')
-		unit = strings.ToLower(strings.TrimSpace(unit))
-
-		avg, err := yr.Average(unit)
-		if err != nil {
-			fmt.Println("Error calculating average temperature:", err)
-			return
-		}
-		fmt.Printf("Average temperature: %.2f %s\n", avg, unit)
-	}
-
-	// Wait for user input
-	fmt.Println("Press enter to exit.")
-	fmt.Scanln()
-}
-**/
+//func celsiusToFahrenheit(celsius float64) float64 {
+//	return celsius*9/5 + 32
+//}
