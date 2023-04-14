@@ -1,2 +1,2 @@
-hei
-test
+Oppgave Minyr
+IS-105

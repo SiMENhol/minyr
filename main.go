@@ -27,7 +27,7 @@ func main() {
 		if err := handleAverageOption(); err != nil {
 			log.Fatal(err)
 		}
-	case "exit", "quit", "q":
+	case "exit", "stop", "quit", "q":
 		fmt.Println("Exiting...")
 		os.Exit(0)
 	default:
@@ -36,10 +36,10 @@ func main() {
 }
 
 func presentOptions() string {
-	fmt.Println("choose:")
-	fmt.Println("  - 'convert' to convert temperature data from Celsius to Fahrenheit")
-	fmt.Println("  - 'average' to get the average temperature for the entire period")
-	fmt.Print("Enter convert or average: ")
+	fmt.Println("Venligst velg convert, average eller exit:")
+	fmt.Println(" 'convert' Konverterer alle målingene gitt i grader Celsius til grader Fahrenheit")
+	fmt.Println(" 'average' gjennomsnittstemperatur for hele perioden av temperaturmålinger.")
+	fmt.Print("Skriv convert eller average: ")
 
 	reader := bufio.NewReader(os.Stdin)
 	choice, err := reader.ReadString('\n')
@@ -74,7 +74,7 @@ func handleConvertOption() error {
 			fmt.Println("Output file generated successfully.")
 		default:
 			// Do not generate output file again
-			fmt.Println("Exiting program.")
+			fmt.Println("Avslutter progammet")
 		}
 	} else {
 		// Output file does not exist, generate it
@@ -89,7 +89,7 @@ func handleConvertOption() error {
 func handleAverageOption() error {
 
 	// Prompt user for unit of measurement
-	fmt.Print("What unit of measurement do you want the average temperature in? (c/f): ")
+	fmt.Print("I hvilken målenehet ønsker du den gjennomsnittlige temperaturen i? (c/f): ")
 
 	// Read user input
 	reader := bufio.NewReader(os.Stdin)
@@ -106,16 +106,16 @@ func handleAverageOption() error {
 		if err != nil {
 			return err
 		}
-		fmt.Printf("Average temperature: %.2f °C\n", average)
+		fmt.Printf("Gjennomsnittlig temperatur: %.2f °C\n", average)
 	case "f":
 		// Calculate average temperature in Fahrenheit from output file and print
 		average, err := calculateAverageTemperature(outputFile, "f")
 		if err != nil {
 			return err
 		}
-		fmt.Printf("Average temperature: %.2f °F\n", average)
+		fmt.Printf("Gjennomsnittlig temperatur: %.2f °F\n", average)
 	default:
-		fmt.Println("Invalid unit of measurement.")
+		fmt.Println("Du må velge mellom c og f")
 	}
 
 	return nil
@@ -124,8 +124,8 @@ func handleAverageOption() error {
 func calculateAverageTemperature(filepath, unit string) (float64, error) {
 	file, err := os.Open(filepath)
 	if err != nil {
-		fmt.Println("File does not exist. You must first convert the file from celsius to fahrenheit.")
-		fmt.Println("Exiting program.")
+		fmt.Println("Filen finnes ikke. Prøv først å konvertere fra celsius til farhenheit")
+		fmt.Println("Avslutter programmet.")
 		return 0, err
 	}
 	defer file.Close()
