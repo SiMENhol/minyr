@@ -1,20 +1,19 @@
 package yr
 
 import (
-	"fmt"
-	"io/ioutil"
+	"bufio"
 	"os"
 	"testing"
 )
 
 func testNumberOfLines(t *testing.T, filename string, expected int) {
-	count, err := GetNumberOfLines(filename)
+	count, err := GetLastLine(filename)
 	if err != nil {
-		t.Fatalf("Error counting lines: %v", err)
+		t.Fatalf("Feil ved telling av linjer: %v", err)
 	}
 
 	if count != expected {
-		t.Errorf("Unexpected number of lines in file %s: expected %d, got %d", filename, expected, count)
+		t.Errorf("Uventet antall linjer i filen %s: Forventa %d, Fikk %d", filename, expected, count)
 	}
 }
 
@@ -22,32 +21,11 @@ const inputFile = "../kjevik-temp-celsius-20220318-20230318.csv"
 const outputFile = "../kjevik-temp-fahr-20220318-20230318.csv"
 
 func TestNumberOfLines(t *testing.T) {
-	// Test number of lines in input file
+	//Tester hvor mange linjer, både på input(cels) filen og output(fahr) filen
 	testNumberOfLines(t, inputFile, 16756)
 
-	// Test number of lines in output file
-	//testNumberOfLines(t, outputFile, 16756)
-}
-func TestGetNumberOfLines(t *testing.T) {
-	// Create a temporary file with some lines
-	file, err := ioutil.TempFile("", "testfile")
-	if err != nil {
-		t.Fatalf("Error creating temp file: %v", err)
-	}
-	defer os.Remove(file.Name())
+	testNumberOfLines(t, outputFile, 16756)
 
-	lines := []string{
-		"line 1",
-		"line 2",
-		"line 3",
-	}
-
-	for _, line := range lines {
-		fmt.Fprintln(file, line)
-	}
-
-	// Test that the file has the expected number of lines
-	//testNumberOfLines(t, file.Name(), len(lines))
 }
 
 func TestCelsiusToFahrenheitString(t *testing.T) {
@@ -70,7 +48,7 @@ func TestCelsiusToFahrenheitString(t *testing.T) {
 	}
 }
 
-func TestCelsiusToFahrenheitConversion(t *testing.T) {
+func TestCelsiusToFahrenheitFull(t *testing.T) {
 	type test struct {
 		input string
 		want  string
@@ -89,20 +67,35 @@ func TestCelsiusToFahrenheitConversion(t *testing.T) {
 		}
 	}
 }
-func TestLastLine(t *testing.T) {
-	type test struct {
-		input string
-		want  string
-	}
-	tests := []test{
 
-		{input: "Data er gyldig per 18.03.2023 (CC BY 4.0), Meteorologiskinstitutt (MET);;;", want: "Data er basert på gyldig data (per 18.03.2023) (CCBY 4.0) fra Meteorologisk institutt (MET);endringen er gjort av SiMENhol"},
+func TestLastLineOfFiles(t *testing.T) {
+	// Map of file names and expected last lines
+	expected := map[string]string{
+		inputFile:  "Data er gyldig per 18.03.2023 (CC BY 4.0), Meteorologisk institutt (MET);;;",
+		outputFile: "Data er basert på gyldig data (per 18.03.2023) (CC BY 4.0) fra Meteorologisk institutt (MET);endringen er gjort av SiMENhol",
 	}
 
-	for _, tc := range tests {
-		got, _ := CelsiusToFahrenheitLine(tc.input)
-		if tc.want != got {
-			t.Errorf("Test mislykkes, forventa: %s, Fikk: %s", tc.want, got)
+	for filename, want := range expected {
+		// Open the file
+		file, err := os.Open(filename)
+		if err != nil {
+			t.Fatalf("Feil ved åpning av filen %q: %v", filename, err)
+		}
+		defer file.Close()
+
+		// Create a scanner and set its split function to ScanLines
+		scanner := bufio.NewScanner(file)
+		scanner.Split(bufio.ScanLines)
+
+		var lastLine string
+		// Iterate over the lines in the file and store the last line in a variable
+		for scanner.Scan() {
+			lastLine = scanner.Text()
+		}
+
+		// Check that the last line matches the expected value using want
+		if lastLine != want {
+			t.Errorf("%q: last line = %q, want %q", filename, lastLine, want)
 		}
 	}
 }
