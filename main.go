@@ -28,10 +28,10 @@ func main() {
 			log.Fatal(err)
 		}
 	case "exit", "stop", "quit", "q":
-		fmt.Println("Exiting...")
+		fmt.Println("Avslutter..")
 		os.Exit(0)
 	default:
-		fmt.Println("Invalid choice.")
+		fmt.Println("Feil valg")
 	}
 }
 
@@ -58,7 +58,7 @@ func handleConvertOption() error {
 	if _, err := os.Stat(outputFile); err == nil {
 		// Output file already exists, ask user if they want to generate it again
 		reader := bufio.NewReader(os.Stdin)
-		fmt.Print("Output file already exists. Generate again? (y/n): ")
+		fmt.Print("Filen finnes allerede fra før, ønsker du å generere på nytt? (y/n): ")
 		confirm, err := reader.ReadString('\n')
 		if err != nil {
 			return err
@@ -66,12 +66,12 @@ func handleConvertOption() error {
 		confirm = strings.TrimSpace(strings.ToLower(confirm))
 
 		switch confirm {
-		case "y", "yes":
+		case "y", "yes", "ja":
 			// Generate output file again
 			if err := generateOutputFile(); err != nil {
 				return err
 			}
-			fmt.Println("Output file generated successfully.")
+			fmt.Println("Fil generert")
 		default:
 			// Do not generate output file again
 			fmt.Println("Avslutter progammet")
@@ -81,7 +81,7 @@ func handleConvertOption() error {
 		if err := generateOutputFile(); err != nil {
 			return err
 		}
-		fmt.Println("Output file generated successfully.")
+		fmt.Println("Fil generert")
 	}
 	return nil
 }
@@ -193,9 +193,9 @@ func generateOutputFile() error {
 	// get number of lines in file
 	totalLines, err := yr.GetNumberOfLines(inputFile.Name())
 	if err != nil {
-		fmt.Println("Error counting lines:", err)
+		fmt.Println("Feil ved lesing av linjer:", err)
 	} else {
-		fmt.Println("Number of lines in inputfile:", totalLines)
+		fmt.Println("Det totale antallet linjer er :", totalLines)
 	}
 
 	lineCount := 0
@@ -233,7 +233,3 @@ func generateOutputFile() error {
 	}
 	return nil
 }
-
-//func celsiusToFahrenheit(celsius float64) float64 {
-//	return celsius*9/5 + 32
-//}

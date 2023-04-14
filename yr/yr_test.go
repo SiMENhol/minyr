@@ -95,9 +95,7 @@ func TestLastLineOfFiles(t *testing.T) {
 
 		// Check that the last line matches the expected value using want
 		if lastLine != want {
-			t.Errorf("%q: last line = %q, want %q", filename, lastLine, want)
+			t.Errorf("%q: Siste linje = %q, Ønsker %q", filename, lastLine, want)
 		}
 	}
 }
-
-//en test som sjekker om gjennomsnittstemperatur er 8.56?

@@ -41,10 +41,6 @@ func CelsiusToFahrenheitString(celsius string) (string, error) {
 	return fahrString, err
 }
 
-// Forutsetter at vi kjenner strukturen i filen og denne implementasjon
-// er kun for filer som inneholder linjer hvor det fjerde element
-// på linjen er verdien for temperaturaaling i grader celsius
-
 func CelsiusToFahrenheitLine(line string) (string, error) {
 
 	dividedString := strings.Split(line, ";")
