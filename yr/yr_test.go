@@ -2,7 +2,12 @@ package yr
 
 import (
 	"bufio"
+	"fmt"
+	"io"
+	"math"
 	"os"
+	"strconv"
+	"strings"
 	"testing"
 )
 
@@ -98,4 +103,69 @@ func TestLastLineOfFiles(t *testing.T) {
 			t.Errorf("%q: Siste linje = %q, Ønsker %q", filename, lastLine, want)
 		}
 	}
+}
+
+func TestCalculateAverageTemperature(t *testing.T) {
+	expected := 8.56
+	actual, err := calculateAverageTemperature(inputFile, "C")
+
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+
+	if math.Abs(actual-expected) > 0.01 {
+		t.Errorf("Expected average temperature to be %v, but got %v", expected, actual)
+	}
+}
+
+func calculateAverageTemperature(filepath, unit string) (float64, error) {
+	file, err := os.Open(filepath)
+	if err != nil {
+		fmt.Println("Filen finnes ikke. Prøv først å konvertere fra celsius til farhenheit")
+		fmt.Println("Avslutter programmet.")
+		return 0, err
+	}
+	defer file.Close()
+
+	reader := bufio.NewReader(file)
+
+	var sum float64
+	var count int
+
+	for {
+		line, err := reader.ReadString('\n')
+		if err == io.EOF {
+			break
+		} else if err != nil {
+			return 0, err
+		}
+
+		// Split the line into parts
+		parts := strings.Split(strings.TrimSpace(line), ";")
+		if len(parts) != 4 {
+			// Skip line if it does not contain four parts
+			fmt.Printf("Skipping line: %s", line)
+			continue
+		}
+
+		// Parse the temperature
+		temperature, err := strconv.ParseFloat(parts[3], 64)
+		if err != nil {
+			// Skip line if conversion fails
+			fmt.Printf("Skipping line: %s", line)
+			continue
+		}
+
+		// Add temperature to sum
+		sum += temperature
+		count++
+	}
+
+	// Calculate average temperature
+	var average float64
+	if count > 0 {
+		average = sum / float64(count)
+	}
+
+	return average, nil
 }
